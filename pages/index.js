@@ -1,3 +1,5 @@
+import Head from 'next/head';
+
 import EventList from '../components/events/event-list';
 // import { getFeaturedEvents } from '../dummy-data';
 import { getFeaturedEvents } from '../helpers/api-utils';
@@ -18,5 +20,6 @@ export async function getStaticProps() {
     props: {
       events: featuredEvents,
     },
+    revalidate: 1800,
   };
 }

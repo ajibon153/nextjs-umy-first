@@ -5,9 +5,9 @@ import { getAllEvents } from '../../dummy-data';
 import EventList from '../../components/events/event-list';
 import EventSearch from '../../components/events/event-search';
 
-const AllEventsPage = () => {
+const AllEventsPage = (props) => {
   const router = useRouter();
-  const events = getAllEvents();
+  const { events } = props;
 
   function findEventHandler(year, month) {
     const fullPath = `/events/${year}/${month}`;
@@ -21,5 +21,14 @@ const AllEventsPage = () => {
     </Fragment>
   );
 };
+
+export async function getStaticProps() {
+  const events = getAllEvents();
+  return {
+    props: {
+      events,
+    },
+  };
+}
 
 export default AllEventsPage;
