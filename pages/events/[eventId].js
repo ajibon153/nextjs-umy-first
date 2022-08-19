@@ -1,7 +1,5 @@
 import { Fragment } from 'react';
-// import { useRouter } from 'next/router';
-
-// import { getEventById } from '../../dummy-data';
+import Comment from '../../components/input/comments';
 import {
   getEventById,
   getAllEvents,
@@ -41,6 +39,7 @@ function EventDetailPage(props) {
       <EventContent>
         <p>{event.description}</p>
       </EventContent>
+      <Comment eventId={event.id} />
     </Fragment>
   );
 }

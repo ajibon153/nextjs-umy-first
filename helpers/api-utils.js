@@ -1,4 +1,6 @@
+// rn-shop-udemy by ajicwgkng@gmail.com
 let url = 'https://teseatit.firebaseio.com/';
+
 export async function getAllEvents() {
   const response = await fetch(url + 'events.json');
   const data = await response.json();
