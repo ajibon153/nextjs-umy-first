@@ -1,5 +1,12 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## About the project
+
+Project that created for learning nextjs, the project is about a blog post web app
+that show a post with the dummy data with SSG fetch data.
+With filtered data by monts and years that fetch with the url slug
+Also Optimizing image show with next module and meta data tags on \_app.js and \_documentation.js component
+
 ## Getting Started
 
 First, run the development server:
