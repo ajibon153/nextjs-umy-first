@@ -8,6 +8,7 @@ import EventList from '../../components/events/event-list';
 import ResulTitle from '../../components/events/results-title';
 import Button from '../../components/UI/button';
 import ErrorAlert from '../../components/UI/error-alert';
+import Head from 'next/head';
 
 function FilteredEventsPage(props) {
   const [LoadedEvents, setLoadedEvents] = useState(null);
@@ -35,7 +36,19 @@ function FilteredEventsPage(props) {
     }
   }, [data]);
 
-  if (!LoadedEvents) return <p className='center'>Loading...</p>;
+  const HeadSection = (
+    <Head>
+      <title>Filtered Event</title>
+      <meta name='description' content={`A list of filtered events.`} />
+    </Head>
+  );
+
+  if (!LoadedEvents)
+    return (
+      <Fragment>
+        {HeadSection} <p className='center'>Loading...</p>
+      </Fragment>
+    );
 
   const filteredYear = filterData[0];
   const filteredMonth = filterData[1];
@@ -54,6 +67,7 @@ function FilteredEventsPage(props) {
   )
     return (
       <Fragment>
+        {HeadSection}
         <ErrorAlert>
           <p>Invalid filter, please adjust your values!</p>
         </ErrorAlert>
@@ -74,6 +88,7 @@ function FilteredEventsPage(props) {
   if (!filteredEvents || filteredEvents.length === 0)
     return (
       <Fragment>
+        {HeadSection}
         <div className='center'>
           <ErrorAlert>
             <p>No events found for the chosen filter!</p>
@@ -87,6 +102,7 @@ function FilteredEventsPage(props) {
 
   return (
     <Fragment>
+      {HeadSection}
       <ResulTitle date={dateParse} />
       <EventList items={filteredEvents} />
     </Fragment>

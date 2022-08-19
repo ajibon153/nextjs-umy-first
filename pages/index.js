@@ -8,6 +8,13 @@ import styles from '../styles/Home.module.css';
 export default function HomePage(props) {
   return (
     <div className={styles.container}>
+      <Head>
+        <title>Next JS Event</title>
+        <meta
+          name='description'
+          content='Find a lot of great events that allow you to evolve'
+        />
+      </Head>
       <EventList items={props.events} />
     </div>
   );

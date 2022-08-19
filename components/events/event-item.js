@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image'; // Optimizing image = cache, compress size, multiple screen size
 import classes from './event-item.module.css';
 import Button from '../UI/button';
 import DateIcon from '../icons/date-icon';
@@ -18,7 +19,8 @@ function EventItem(props) {
 
   return (
     <li className={classes.item}>
-      <img src={'/' + image} alt='' />
+      <Image src={'/' + image} alt={title} width={250} height={160} />
+      {/* <img src={'/' + image} alt={title} /> */}
       <div className={classes.content}>
         <div className={classes.sumary}>
           <h2>{title}</h2>
