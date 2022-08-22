@@ -11,6 +11,7 @@ export async function getAllEvents() {
       ...data[key],
     });
   }
+  console.log('events', events);
   return events;
 }
 

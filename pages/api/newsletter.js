@@ -1,31 +1,22 @@
-import { MongoClient } from 'mongodb';
-
-const url =
-  'mongodb+srv://next_udemy:jibonanshieru9@udemy-course.8d1jc.mongodb.net/newsletter?retryWrites=true&w=majority';
+import { failed, success } from '../../../helpers/db-utils';
+import { insertOneDocument } from '../../../helpers/result-utils';
 
 async function handler(req, res) {
   if (req.method === 'POST') {
-    const { email } = req.body;
+    const { email } = JSON.parse(req.body);
 
     if (!email || !email.includes('@')) {
-      res.status(422).json({ message: 'Invalid email address.' });
+      failed(res, 422, 'Invalid email address.');
       return;
     }
 
-    await MongoClient.connect(url).then((client) => {
-      console.log('client', client);
-      const db = client.db();
-
-      // insertOne to insert one data
-      return db
-        .collection('emails')
-        .insertOne({ email: userEmail })
-        .then((res) => console.log(res));
-    });
-
-    console.log(email);
-
-    res.status(201).json({ data: { email }, message: 'Sucess signed up!' });
+    try {
+      let data = { email: email };
+      await insertOneDocument('emails', data);
+      success(res, 201, data, 'Success signed up!');
+    } catch (error) {
+      failed(res, 422, 'Failed to signed up.', error);
+    }
   }
 }
 

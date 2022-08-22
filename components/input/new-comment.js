@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import classes from './new-comment.module.css';
 
 function NewComment(props) {
+  const [IsLoading, setIsLoading] = useState(false);
   const [isInvalid, setIsInvalid] = useState(false);
 
   const emailInputRef = useRef();
@@ -10,7 +11,7 @@ function NewComment(props) {
 
   function sendCommentHandler(event) {
     event.preventDefault();
-
+    setIsLoading(true);
     const enteredEmail = emailInputRef.current.value;
     const enteredName = nameInputRef.current.value;
     const enteredComment = commentInputRef.current.value;
@@ -25,6 +26,8 @@ function NewComment(props) {
       enteredComment.trim() === ''
     ) {
       setIsInvalid(true);
+      setIsLoading(false);
+
       return;
     } else {
       setIsInvalid(false);
@@ -35,6 +38,7 @@ function NewComment(props) {
       name: enteredName,
       text: enteredComment,
     });
+    setIsLoading(false);
   }
 
   return (
@@ -54,7 +58,11 @@ function NewComment(props) {
         <textarea id='comment' rows='5' ref={commentInputRef}></textarea>
       </div>
       {isInvalid && <p>Please enter a valid email address and comment!</p>}
-      <button>Submit</button>
+      {!IsLoading ? (
+        <p className={classes.button_loading}>Loading...</p>
+      ) : (
+        <button>Submit</button>
+      )}
     </form>
   );
 }

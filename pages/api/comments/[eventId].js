@@ -1,12 +1,12 @@
-function handler(req, res) {
+import { insertOneDocument, getDocument } from '../../../helpers/db-utils';
+import { failed, success } from '../../../helpers/result-utils';
+
+async function handler(req, res) {
   const eventId = req.query.eventId;
-  console.log('eventId', eventId);
 
   if (req.method === 'POST') {
-    // ssr validation
-
     const { email, name, text } = req.body;
-
+    // ssr validation
     if (
       !email ||
       !email.includes('@') ||
@@ -15,33 +15,28 @@ function handler(req, res) {
       !text ||
       !text.trim()
     ) {
-      res.status(422).json({ message: 'Invalid input.', success: false });
+      failed(res, 'Invalid input.');
       return;
     }
 
     let newComment = {
-      id: new Date().toISOString(),
       email,
       name,
       text,
+      eventId,
     };
 
-    console.log('newComment', newComment);
-
-    res.status(201).json({
-      data: { comments: [newComment] },
-      message: 'Added Comment success!',
-      success: true,
-    });
+    const result = await insertOneDocument(res, 'comments', newComment);
+    newComment.id = result.insertedId;
+    let data = { comments: newComment };
+    success(res, 201, data, 'Added Comment success!');
   }
 
   if (req.method === 'GET') {
-    const dummyList = [
-      { id: 'c1', name: 'Max', text: 'A First Comment!' },
-      { id: 'c2', name: 'Jibon', text: 'A Second Comment!' },
-    ];
-
-    res.status(200).json({ data: { comments: dummyList }, success: true });
+    const result = await getDocument(res, 'comments');
+    console.log('getDocument', result);
+    let data = { comments: result };
+    success(res, 200, data, 'Get data Comment Success!');
   }
 }
 
