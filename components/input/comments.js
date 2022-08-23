@@ -10,7 +10,7 @@ function Comments(props) {
 
   const [showComments, setShowComments] = useState(false);
   const [Comments, setComments] = useState([]);
-  const [IsLoading, setIsLoading] = useState(true);
+  const [IsFetching, setIsFetching] = useState(true);
 
   const NotificationCtx = useContext(NotificationContext);
 
@@ -31,7 +31,7 @@ function Comments(props) {
               status: 'error',
             });
           });
-        setIsLoading(false);
+        setIsFetching(false);
       } else {
         setComments([]);
       }
@@ -46,6 +46,12 @@ function Comments(props) {
   function addCommentHandler(commentData) {
     NotificationCtx.hideNotification();
     // send data to API
+
+    NotificationCtx.showNotification({
+      title: 'Sending data...',
+      message: 'Sending commentar to server',
+      status: 'pending',
+    });
     fetch(`/api/comments/` + eventId, {
       method: 'POST',
       body: JSON.stringify(commentData),
@@ -57,6 +63,11 @@ function Comments(props) {
       .then((data) => {
         if (data.success)
           if (data.data.comments) {
+            NotificationCtx.showNotification({
+              title: 'Success!',
+              message: 'Add new comment Success!',
+              status: 'success',
+            });
             return setComments((prevComment) => [
               ...prevComment,
               data.data.comments,
@@ -81,7 +92,7 @@ function Comments(props) {
       {showComments && <NewComment onAddComment={addCommentHandler} />}
       {showComments && (
         <>
-          {!IsLoading ? (
+          {!IsFetching ? (
             <CommentList items={Comments} />
           ) : (
             <p>Get comment list....</p>
