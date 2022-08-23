@@ -18,25 +18,31 @@ async function handler(req, res) {
       failed(res, 'Invalid input.');
       return;
     }
-
-    let newComment = {
-      email,
-      name,
-      text,
-      eventId,
-    };
-
-    const result = await insertOneDocument(res, 'comments', newComment);
-    newComment.id = result.insertedId;
-    let data = { comments: newComment };
-    success(res, 201, data, 'Added Comment success!');
+    try {
+      let newComment = {
+        email,
+        name,
+        text,
+        eventId,
+      };
+      const result = await insertOneDocument('comments', newComment);
+      newComment.id = result.insertedId;
+      let data = { comments: newComment };
+      success(res, 201, data, 'Added Comment success!');
+    } catch (error) {
+      failed(res, 500, 'Failed insert data', error);
+    }
   }
 
   if (req.method === 'GET') {
-    const result = await getDocument(res, 'comments');
-    console.log('getDocument', result);
-    let data = { comments: result };
-    success(res, 200, data, 'Get data Comment Success!');
+    try {
+      const result = await getDocument('comments');
+      console.log('getDocument', result);
+      let data = { comments: result };
+      success(res, 200, data, 'Get data Comment Success!');
+    } catch (error) {
+      failed(res, 500, 'Failed to get data comments', error);
+    }
   }
 }
 
