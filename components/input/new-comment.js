@@ -58,7 +58,7 @@ function NewComment(props) {
         <textarea id='comment' rows='5' ref={commentInputRef}></textarea>
       </div>
       {isInvalid && <p>Please enter a valid email address and comment!</p>}
-      {!IsLoading ? (
+      {IsLoading ? (
         <p className={classes.button_loading}>Loading...</p>
       ) : (
         <button>Submit</button>

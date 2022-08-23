@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import CommentList from './comment-list';
 import NewComment from './new-comment';
 import classes from './comments.module.css';
+import NotificationContext from '../../store/context/notofication-context';
 
 function Comments(props) {
   const { eventId } = props;
@@ -11,12 +12,25 @@ function Comments(props) {
   const [Comments, setComments] = useState([]);
   const [IsLoading, setIsLoading] = useState(true);
 
+  const NotificationCtx = useContext(NotificationContext);
+
   useEffect(() => {
     async function load() {
+      NotificationCtx.hideNotification();
       if (showComments) {
         await fetch(`/api/comments/${eventId}`)
           .then((res) => res.json())
-          .then((data) => setComments(data.data.comments));
+          .then((data) => {
+            if (data.success) return setComments(data.data.comments);
+            throw new Error(data.message || 'Something went wrong!');
+          })
+          .catch((error) => {
+            NotificationCtx.showNotification({
+              title: 'Error!',
+              message: error.message || 'Something went wrong',
+              status: 'error',
+            });
+          });
         setIsLoading(false);
       } else {
         setComments([]);
@@ -30,6 +44,7 @@ function Comments(props) {
   }
 
   function addCommentHandler(commentData) {
+    NotificationCtx.hideNotification();
     // send data to API
     fetch(`/api/comments/` + eventId, {
       method: 'POST',
@@ -40,9 +55,21 @@ function Comments(props) {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log('data', data);
-        if (data.data.comments)
-          setComments((prevComment) => [...prevComment, data.data.comments]);
+        if (data.success)
+          if (data.data.comments) {
+            return setComments((prevComment) => [
+              ...prevComment,
+              data.data.comments,
+            ]);
+          }
+        throw new Error(data.message || 'Something went wrong!');
+      })
+      .catch((error) => {
+        NotificationCtx.showNotification({
+          title: 'Error!',
+          message: error.message || 'Something went wrong',
+          status: 'error',
+        });
       });
   }
 
@@ -54,7 +81,11 @@ function Comments(props) {
       {showComments && <NewComment onAddComment={addCommentHandler} />}
       {showComments && (
         <>
-          {!IsLoading ? <CommentList items={Comments} /> : <p>Loading....</p>}
+          {!IsLoading ? (
+            <CommentList items={Comments} />
+          ) : (
+            <p>Get comment list....</p>
+          )}
         </>
       )}
     </section>

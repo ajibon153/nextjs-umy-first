@@ -1,5 +1,4 @@
 import { MongoClient } from 'mongodb';
-import { failed } from './result-utils';
 
 const url =
   'mongodb+srv://next_udem:jibonanshieru9@udemy-course.8d1jc.mongodb.net/events?retryWrites=true&w=majority';
@@ -13,6 +12,7 @@ export async function insertOneDocument(collection, data) {
   const connection = await connectDB();
   const result = await connection.db.collection(collection).insertOne(data);
   connection.client.close();
+  // console.log('result',result);
   return result;
 }
 
