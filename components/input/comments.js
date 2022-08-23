@@ -15,6 +15,7 @@ function Comments(props) {
   const NotificationCtx = useContext(NotificationContext);
 
   useEffect(() => {
+    console.log('process.env.DB_FIRE', process.env.DB_FIRE);
     async function load() {
       NotificationCtx.hideNotification();
       if (showComments) {

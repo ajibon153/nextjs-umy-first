@@ -1,7 +1,6 @@
 import { MongoClient } from 'mongodb';
 
-const url =
-  'mongodb+srv://next_udemy:jibonanshieru9@udemy-course.8d1jc.mongodb.net/events?retryWrites=true&w=majority';
+const url = `mongodb+srv://next_udemy:jibonanshieru9@udemy-course.8d1jc.mongodb.net/events?retryWrites=true&w=majority`;
 
 export async function connectDB() {
   const client = await MongoClient.connect(url);

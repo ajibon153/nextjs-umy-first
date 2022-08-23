@@ -1,5 +1,6 @@
 // rn-shop-udemy by ajicwgkng@gmail.com
-let url = 'https://teseatit.firebaseio.com/';
+// https://teseatit.firebaseio.com/
+let url = process.env.DB_FIRE;
 
 export async function getAllEvents() {
   const response = await fetch(url + 'events.json');
